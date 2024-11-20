@@ -1,0 +1,96 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35431.28
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Aplication", "IoTBackend.Aplication", "{D4AA3270-6D51-4258-83CC-3F8D6A27093A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Domain", "IoTBackend.Domain", "{DCDD19F1-9ED9-4E81-B58E-7BB278033738}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Infraestructure", "IoTBackend.Infraestructure", "{163AE478-5339-49E1-8292-0DEF20798E90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Test", "IoTBackend.Test", "{6F122642-0E49-415D-B908-87DC9253EE9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Services", "IoTBackend.Services", "{D695F85E-969C-45D1-9BF6-152C532473DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IoTBackend.Transversal", "IoTBackend.Transversal", "{7FD83457-C003-4DEA-8EDD-0D238F947287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Services.WebAppi", "IoTBackend.Services.WebAppi\IoTBackend.Services.WebAppi.csproj", "{5C63BF87-500A-463F-9EC3-A1560463270F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Aplication.DTOs", "IoTBackend.Aplication.DTOs\IoTBackend.Aplication.DTOs\IoTBackend.Aplication.DTOs.csproj", "{7ECC9E01-50E5-4749-9B68-8B647923D910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Aplication.Interfaces", "IoTBackend.Aplication.Interfaces\IoTBackend.Aplication.Interfaces\IoTBackend.Aplication.Interfaces.csproj", "{D2888F40-1C04-47E1-91CF-EAB63B98B87C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Aplication.UseCases", "IoTBackend.Aplication.UseCases\IoTBackend.Aplication.UseCases\IoTBackend.Aplication.UseCases.csproj", "{8D990F7E-1F2E-45A4-B598-7BDC6AF78122}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Domain.Dominio", "IoTBackend.Domain.Dominio\IoTBackend.Domain.Dominio\IoTBackend.Domain.Dominio.csproj", "{D3891535-FFAF-41D6-8915-5DB17C802334}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Infraestructure.Infraestructura", "IoTBackend.Infraestructure.Infraestructura\IoTBackend.Infraestructure.Infraestructura\IoTBackend.Infraestructure.Infraestructura.csproj", "{F0F68368-EA01-48C6-AFF9-3FFFA40946C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Infraestructure.Persistence", "IoTBackend.Infraestructure.Persistence\IoTBackend.Infraestructure.Persistence\IoTBackend.Infraestructure.Persistence.csproj", "{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Transversal.Common", "IoTBackend.Transversal.Common\IoTBackend.Transversal.Common\IoTBackend.Transversal.Common.csproj", "{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTBackend.Aplication.Services", "IoTBackend.Aplication.Services\IoTBackend.Aplication.Services.csproj", "{2973959C-6FD2-4652-91DF-ABCB5F28BD82}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5C63BF87-500A-463F-9EC3-A1560463270F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C63BF87-500A-463F-9EC3-A1560463270F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C63BF87-500A-463F-9EC3-A1560463270F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C63BF87-500A-463F-9EC3-A1560463270F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7ECC9E01-50E5-4749-9B68-8B647923D910}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7ECC9E01-50E5-4749-9B68-8B647923D910}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7ECC9E01-50E5-4749-9B68-8B647923D910}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7ECC9E01-50E5-4749-9B68-8B647923D910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2888F40-1C04-47E1-91CF-EAB63B98B87C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2888F40-1C04-47E1-91CF-EAB63B98B87C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2888F40-1C04-47E1-91CF-EAB63B98B87C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2888F40-1C04-47E1-91CF-EAB63B98B87C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D990F7E-1F2E-45A4-B598-7BDC6AF78122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D990F7E-1F2E-45A4-B598-7BDC6AF78122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D990F7E-1F2E-45A4-B598-7BDC6AF78122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D990F7E-1F2E-45A4-B598-7BDC6AF78122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3891535-FFAF-41D6-8915-5DB17C802334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3891535-FFAF-41D6-8915-5DB17C802334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3891535-FFAF-41D6-8915-5DB17C802334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3891535-FFAF-41D6-8915-5DB17C802334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0F68368-EA01-48C6-AFF9-3FFFA40946C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0F68368-EA01-48C6-AFF9-3FFFA40946C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0F68368-EA01-48C6-AFF9-3FFFA40946C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0F68368-EA01-48C6-AFF9-3FFFA40946C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2973959C-6FD2-4652-91DF-ABCB5F28BD82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2973959C-6FD2-4652-91DF-ABCB5F28BD82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2973959C-6FD2-4652-91DF-ABCB5F28BD82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2973959C-6FD2-4652-91DF-ABCB5F28BD82}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5C63BF87-500A-463F-9EC3-A1560463270F} = {D695F85E-969C-45D1-9BF6-152C532473DA}
+		{7ECC9E01-50E5-4749-9B68-8B647923D910} = {D4AA3270-6D51-4258-83CC-3F8D6A27093A}
+		{D2888F40-1C04-47E1-91CF-EAB63B98B87C} = {D4AA3270-6D51-4258-83CC-3F8D6A27093A}
+		{8D990F7E-1F2E-45A4-B598-7BDC6AF78122} = {D4AA3270-6D51-4258-83CC-3F8D6A27093A}
+		{D3891535-FFAF-41D6-8915-5DB17C802334} = {DCDD19F1-9ED9-4E81-B58E-7BB278033738}
+		{F0F68368-EA01-48C6-AFF9-3FFFA40946C1} = {163AE478-5339-49E1-8292-0DEF20798E90}
+		{F8F3D829-BA9C-4D7C-AA4F-BBFA88218FA3} = {163AE478-5339-49E1-8292-0DEF20798E90}
+		{50E3741C-A8FD-4DE2-AB9A-FE2CABED0762} = {7FD83457-C003-4DEA-8EDD-0D238F947287}
+		{2973959C-6FD2-4652-91DF-ABCB5F28BD82} = {D4AA3270-6D51-4258-83CC-3F8D6A27093A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7FC1ED10-1EDB-4F3B-829C-62697D69ECE4}
+	EndGlobalSection
+EndGlobal

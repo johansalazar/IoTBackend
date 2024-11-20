@@ -1,0 +1,6 @@
+@IoTBackend.Services.WebAppi_HostAddress = http://localhost:5016
+
+GET {{IoTBackend.Services.WebAppi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
