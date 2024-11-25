@@ -9,6 +9,7 @@ namespace IoTBackend.Aplication.DTOs
     public class AuthResponseDTO
     {
         public string? Token { get; set; }
+        public string? Name { get; set; }
         public DateTime Expiration { get; set; }
     }
 }

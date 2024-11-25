@@ -96,6 +96,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<UserUseCases>();
 builder.Services.AddScoped<AuthService>();
 
+// Agregar políticas de CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder => builder
+            .WithOrigins("http://localhost:4200") // Dominio del frontend
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 
 var app = builder.Build();
 
@@ -104,6 +114,8 @@ var app = builder.Build();
 //var migrationService = app.Services.GetRequiredService<MigrationService>();
 //migrationService.MigrateDatabaseAsync().GetAwaiter().GetResult();
 
+// Usar CORS
+app.UseCors("AllowLocalhost");
 EnsureDatabaseCreatedAndMigrate(app);
 
 // Configure the HTTP request pipeline.

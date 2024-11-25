@@ -1,5 +1,6 @@
 ﻿using IoTBackend.Aplication.DTOs;
 using IoTBackend.Aplication.Interfaces;
+using IoTBackend.Transversal.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,7 +20,7 @@ namespace IoTBackend.Aplication.Services
             _configuration = configuration;
         }
 
-        public async Task<AuthResponseDTO> AuthenticateAsync(LoginDTO loginDTO)
+        public async Task<Response<AuthResponseDTO>> AuthenticateAsync(LoginDTO loginDTO)
         {
             // Buscar usuario en base de datos por correo electrónico
             var user = await _userRepository.GetAllUsersAsync();
@@ -51,11 +52,26 @@ namespace IoTBackend.Aplication.Services
 
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return new AuthResponseDTO
+            AuthResponseDTO authResponseDTO = new AuthResponseDTO
             {
+                Name = foundUser.Name,
                 Token = jwtToken,
                 Expiration = token.ValidTo
             };
+            Response<AuthResponseDTO> response = new Response<AuthResponseDTO>();
+
+            if (authResponseDTO != null)
+            {
+                response.Data = authResponseDTO;
+                response.IsSuccess = true;
+                response.Message = "Usuario Existente.";
+            }
+            else
+            {
+                response.IsSuccess = false;
+                response.Message = "No Existe el usuario.";
+            }
+            return response;
         }
     }
 }
