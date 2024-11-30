@@ -2,7 +2,6 @@
 using IoTBackend.Aplication.DTOs;
 using IoTBackend.Aplication.UseCases;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IoTBackend.Services.WebAppi.Controllers.v1
@@ -37,13 +36,41 @@ namespace IoTBackend.Services.WebAppi.Controllers.v1
         }
 
         /// <summary>
+        /// Método para eliminar un usuario por su ID.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("DeleteUser/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var response = await _userUseCases.DeleteUserAsync(id);
+            if (response.IsSuccess)
+                return Ok(response);
+
+            return BadRequest(response.Message);
+        }
+
+        /// <summary>
+        /// Método para obtener todos los usuarios.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetAllUsers")]
+        [Authorize]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var response = await _userUseCases.GetAllUsersAsync();
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Método para obtener un usuario por su ID.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
+        [HttpGet("GetUserById/{id}")]
         [Authorize]
-        public async Task<IActionResult> GetUserById(Guid id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var response = await _userUseCases.GetUserByIdAsync(id);
             if (response == null)
@@ -53,48 +80,19 @@ namespace IoTBackend.Services.WebAppi.Controllers.v1
         }
 
         /// <summary>
-        /// Método para obtener todos los usuarios.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("GetAllUsers")]
-        [Authorize]
-        
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var response = await _userUseCases.GetAllUsersAsync();
-            return Ok(response);
-        }
-
-        /// <summary>
         /// Método para actualizar un usuario existente.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="userDto"></param>
         /// <returns></returns>
-        [HttpPut("{id}")]
+        [HttpPut("UpdateUser/{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UserDTO userDto)
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDTO userDto)
         {
             if (userDto == null)
                 return BadRequest("El usuario no puede ser nulo.");
-
+            userDto.Id = id;
             var response = await _userUseCases.UpdateUserAsync(id, userDto);
-            if (response.IsSuccess)
-                return Ok(response);
-
-            return BadRequest(response.Message);
-        }
-
-        /// <summary>
-        /// Método para eliminar un usuario por su ID.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpDelete("{id}")]
-        [Authorize]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        {
-            var response = await _userUseCases.DeleteUserAsync(id);
             if (response.IsSuccess)
                 return Ok(response);
 

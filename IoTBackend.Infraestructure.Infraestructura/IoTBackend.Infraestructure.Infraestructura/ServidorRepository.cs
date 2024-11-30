@@ -2,11 +2,6 @@
 using IoTBackend.Domain.Dominio.Entities;
 using IoTBackend.Infraestructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTBackend.Infraestructure.Infraestructura
 {
@@ -19,9 +14,17 @@ namespace IoTBackend.Infraestructure.Infraestructura
             _context = context;
         }
 
-        public async Task<Servidor> GetServidorByIdAsync(Guid id)
+        public async Task<Servidor> GetServidorByIdAsync(string id)
         {
-            return await _context.Servidores.FirstOrDefaultAsync(s => s.Id == id);
+            if (Guid.TryParse(id, out Guid parsedId))
+            {
+                return await _context.Servidores.FirstOrDefaultAsync(s => s.Id == parsedId);
+            }
+            else
+            {
+                // Manejar el caso cuando la conversión falle
+                throw new ArgumentException("El ID proporcionado no es un GUID válido.", nameof(id));
+            }
         }
 
         public async Task<IEnumerable<Servidor>> GetAllServidoresAsync()
@@ -38,19 +41,43 @@ namespace IoTBackend.Infraestructure.Infraestructura
 
         public async Task<bool> UpdateServidorAsync(Servidor servidor)
         {
-            _context.Servidores.Update(servidor);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            try
+            {
+                var existingServidor = await _context.Servidores.FindAsync(servidor.Id);
+                if (existingServidor == null)
+                    return false;
+
+                _context.Entry(existingServidor).CurrentValues.SetValues(servidor);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public async Task<bool> DeleteServidorAsync(Guid id)
+        public async Task<bool> DeleteServidorAsync(string id)
         {
-            var servidor = await GetServidorByIdAsync(id);
-            if (servidor == null) return false;
+            try
+            {
+                var servidor = await GetServidorByIdAsync(id);
+                if (servidor == null) return false;
 
-            _context.Servidores.Remove(servidor);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+                // Cambiar el estado a inactivo (false)
+                servidor.Estado = false;
+
+                // Marcar la entidad como modificada        
+
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                // Aquí puedes registrar el error si es necesario
+                Console.WriteLine($"Error al desactivar el servidor: {ex.Message}");
+                return false;
+            }
         }
     }
 }

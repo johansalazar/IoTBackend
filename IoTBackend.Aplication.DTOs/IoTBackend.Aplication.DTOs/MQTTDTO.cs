@@ -13,7 +13,8 @@ namespace IoTBackend.Aplication.DTOs
         public string? UsuarioMQTT { get; set; }
         public string? ClaveMQTT { get; set; }
         public bool Estado { get; set; }
-        public string Auditoria { get; set; }
+        public string? Auditoria { get; set; }
         public DateTime FechaCreacion { get; set; }
+            
     }
 }

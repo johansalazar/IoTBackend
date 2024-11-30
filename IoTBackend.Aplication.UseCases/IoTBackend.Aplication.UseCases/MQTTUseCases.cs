@@ -3,11 +3,6 @@ using IoTBackend.Aplication.DTOs;
 using IoTBackend.Aplication.Interfaces;
 using IoTBackend.Domain.Dominio.Entities;
 using IoTBackend.Transversal.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTBackend.Aplication.UseCases
 {
@@ -56,7 +51,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<MQTTDTO>> GetMQTTByIdAsync(Guid id)
+        public async Task<Response<MQTTDTO>> GetMQTTByIdAsync(string id)
         {
             var response = new Response<MQTTDTO>();
             try
@@ -100,16 +95,36 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> UpdateMQTTAsync(MQTTDTO mqttDto)
+        public async Task<Response<bool>> UpdateMQTTAsync(string id, MQTTDTO mqttDto)
         {
             var response = new Response<bool>();
             try
             {
-                var mqtt = _mapper.Map<MQTT>(mqttDto);
-                var result = await _mqttRepository.UpdateMQTTAsync(mqtt);
-                response.Data = result;
-                response.IsSuccess = result;
-                response.Message = result ? "MQTT actualizado con éxito." : "No se pudo actualizar el MQTT.";
+                var mqtt = await _mqttRepository.GetMQTTByIdAsync(id);
+                if (mqtt == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Usuario no encontrado.";
+                    return response;
+                }
+                
+                // Mapeo del DTO al modelo de dominio
+                _mapper.Map(mqttDto, mqtt);
+
+                var result = await
+               _mqttRepository.UpdateMQTTAsync(mqtt); 
+                if (result)
+                {
+                    response.Data = result;
+                    response.IsSuccess = result;
+                    response.Message = result ? "MQTT actualizado con éxito." : "No se pudo actualizar el MQTT.";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "No se pudo actualizar el MQTT.";
+                }                
+                
             }
             catch (Exception e)
             {
@@ -120,7 +135,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> DeleteMQTTAsync(Guid id)
+        public async Task<Response<bool>> DeleteMQTTAsync(string id)
         {
             var response = new Response<bool>();
             try

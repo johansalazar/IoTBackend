@@ -12,6 +12,8 @@ namespace IoTBackend.Aplication.DTOs
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
         public bool Estado { get; set; }
-        public DateTime FechaCreacion { get; set; }
+        public DateTime FechaCreacion { get; set; }        
+        public Guid ServidorId { get; set; }  // Clave foránea
+        
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IoTBackend.Infraestructure.Persistence.Migrations
 {
     [DbContext(typeof(IoTDbContext))]
-    [Migration("20241120221800_IoTDevicesDB")]
+    [Migration("20241129230508_IoTDevicesDB")]
     partial class IoTDevicesDB
     {
         /// <inheritdoc />
@@ -36,17 +36,28 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("DeviceType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("IdLocation")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IdLocation");
 
                     b.ToTable("Devices");
                 });
@@ -73,7 +84,12 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<Guid>("ServidorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ServidorId");
 
                     b.ToTable("Locations");
                 });
@@ -86,14 +102,12 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Auditoria")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ClaveMQTT")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DireccionIPBroker")
                         .HasMaxLength(150)
@@ -106,9 +120,8 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UsuarioMQTT")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -119,36 +132,14 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasMaxLength(36)
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Auditoria")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("DireccionIP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("NombreHost")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Servidores");
-                });
-
-            modelBuilder.Entity("IoTBackend.Infraestructure.Persistence.Contexts.User", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
@@ -158,18 +149,82 @@ namespace IoTBackend.Infraestructure.Persistence.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
+                    b.Property<Guid>("IdMQTT")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NombreHost")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdMQTT");
+
+                    b.ToTable("Servidores");
+                });
+
+            modelBuilder.Entity("IoTBackend.Infraestructure.Persistence.Contexts.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("IoTBackend.Domain.Dominio.Entities.IoTDevice", b =>
+                {
+                    b.HasOne("IoTBackend.Domain.Dominio.Entities.Location", "Location")
+                        .WithMany("IoTDevices")
+                        .HasForeignKey("IdLocation")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("IoTBackend.Domain.Dominio.Entities.Location", b =>
+                {
+                    b.HasOne("IoTBackend.Domain.Dominio.Entities.Servidor", "Servidor")
+                        .WithMany()
+                        .HasForeignKey("ServidorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Servidor");
+                });
+
+            modelBuilder.Entity("IoTBackend.Domain.Dominio.Entities.Servidor", b =>
+                {
+                    b.HasOne("IoTBackend.Domain.Dominio.Entities.MQTT", "MQTTs")
+                        .WithMany()
+                        .HasForeignKey("IdMQTT")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MQTTs");
+                });
+
+            modelBuilder.Entity("IoTBackend.Domain.Dominio.Entities.Location", b =>
+                {
+                    b.Navigation("IoTDevices");
                 });
 #pragma warning restore 612, 618
         }

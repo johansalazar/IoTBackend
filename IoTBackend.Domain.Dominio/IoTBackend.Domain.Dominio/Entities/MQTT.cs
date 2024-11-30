@@ -13,7 +13,8 @@ namespace IoTBackend.Domain.Dominio.Entities
         public string? UsuarioMQTT { get; set; }
         public string? ClaveMQTT { get; set; }
         public bool Estado { get; set; }
-        public string? Auditoria { get; set; } // Auditoría (por ejemplo, 'Creado por: Admin, Fecha: 2024-11-20')
+        public string? Auditoria { get; set; } // Auditoría
         public DateTime FechaCreacion { get; set; }
+               
     }
 }

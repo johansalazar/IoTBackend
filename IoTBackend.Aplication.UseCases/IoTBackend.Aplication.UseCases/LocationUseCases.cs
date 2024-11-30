@@ -29,6 +29,7 @@ namespace IoTBackend.Aplication.UseCases
             {
                 var location = _mapper.Map<Location>(locationDto);
                 location.Id = Guid.NewGuid(); // Asignar un nuevo GUID al dispositivo
+                location.FechaCreacion = DateTime.Now;
 
                 var result = await _locationRepository.AddLocationAsync(location);
                 if (result)
@@ -52,7 +53,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<LocationDTO>> GetLocationByIdAsync(Guid id)
+        public async Task<Response<LocationDTO>> GetLocationByIdAsync(string id)
         {
             var response = new Response<LocationDTO>();
             try
@@ -96,7 +97,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> DeleteLocationAsync(Guid id)
+        public async Task<Response<bool>> DeleteLocationAsync(string id)
         {
             var response = new Response<bool>();
             try
@@ -115,16 +116,37 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> UpdateLocationAsync(LocationDTO locationDTO )
+        public async Task<Response<bool>> UpdateLocationAsync(string id, LocationDTO locationDTO )
         {
             var response = new Response<bool>();
             try
-            {
-                var location = _mapper.Map<Location>(locationDTO);
-                var result = await _locationRepository.UpdateLocationAsync(location);
-                response.Data = result;
-                response.IsSuccess = result;
-                response.Message = result ? "Location actualizado con éxito." : "No se pudo actualizar el MQTT.";
+            {                           
+
+                var location = await _locationRepository.GetLocationByIdAsync(id);
+                if (location == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Usuario no encontrado.";
+                    return response;
+                }
+                // Mapeo del DTO al modelo de dominio
+                _mapper.Map(locationDTO, location);
+
+                var result = await
+                    _locationRepository.UpdateLocationAsync(location);
+
+                if (result)
+                {
+                    response.Data = result;
+                    response.IsSuccess = result;
+                    response.Message = result ? "Servidor actualizado con éxito." : "No se pudo actualizar el location.";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "No se pudo actualizar el location.";
+                }
+
             }
             catch (Exception e)
             {

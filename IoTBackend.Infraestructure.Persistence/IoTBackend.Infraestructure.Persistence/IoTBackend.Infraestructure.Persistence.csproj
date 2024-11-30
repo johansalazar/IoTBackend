@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\IoTBackend.Domain.Dominio\IoTBackend.Domain.Dominio\IoTBackend.Domain.Dominio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

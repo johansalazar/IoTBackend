@@ -9,10 +9,10 @@ namespace IoTBackend.Aplication.Interfaces
 {
     public interface IMQTTRepository
     {
-        Task<MQTT> GetMQTTByIdAsync(Guid id);
+        Task<MQTT> GetMQTTByIdAsync(string id);
         Task<IEnumerable<MQTT>> GetAllMQTTsAsync();
         Task<bool> AddMQTTAsync(MQTT mqtt);
         Task<bool> UpdateMQTTAsync(MQTT mqtt);
-        Task<bool> DeleteMQTTAsync(Guid id);
+        Task<bool> DeleteMQTTAsync(string id);
     }
 }

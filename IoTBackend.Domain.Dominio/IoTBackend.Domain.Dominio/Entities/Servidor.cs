@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IoTBackend.Domain.Dominio.Entities
+﻿namespace IoTBackend.Domain.Dominio.Entities
 {
     public class Servidor
     {
@@ -14,5 +8,9 @@ namespace IoTBackend.Domain.Dominio.Entities
         public DateTime FechaCreacion { get; set; }
         public string? Auditoria { get; set; } // Campo de auditoría (por ejemplo, 'Creado por: Admin, Fecha: 2024-11-20')
         public bool Estado { get; set; }
+        public Guid IdMQTT { get; set; }
+
+        // Relación uno a muchos con MQTT
+        public MQTT? MQTTs { get; set; } // Un Servidor puede tener muchos MQTT
     }
 }

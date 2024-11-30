@@ -9,10 +9,10 @@ namespace IoTBackend.Aplication.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> GetUserByIdAsync(Guid id);
+        Task<User> GetUserByIdAsync(string id);
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task<bool> AddUserAsync(User user);
         Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(Guid id);
+        Task<bool> DeleteUserAsync(string id);
     }
 }

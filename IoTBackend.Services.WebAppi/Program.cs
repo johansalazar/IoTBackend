@@ -2,6 +2,7 @@ using Asp.Versioning.ApiExplorer;
 using IoTBackend.Aplication.Interfaces;
 using IoTBackend.Aplication.Services;
 using IoTBackend.Aplication.UseCases;
+using IoTBackend.Infraestructure.Infraestructura;
 using IoTBackend.Infraestructure.Infraestructura.IOT;
 using IoTBackend.Infraestructure.Infraestructura.User;
 using IoTBackend.Infraestructure.Persistence.Contexts;
@@ -17,10 +18,11 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -57,11 +59,23 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddVersioning();
 builder.Services.AddApplicationServices();
 
+// agregar los repositorios
+builder.Services.AddScoped<IMQTTRepository, MQTTRepository>();
+builder.Services.AddScoped<IServidorRepository, ServidorRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<IIoTDeviceRepository, IoTDeviceRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-// Configuración de otras dependencias
 
+// Agregar los casos de uso
+builder.Services.AddScoped<UserUseCases>();
+builder.Services.AddScoped<MQTTUseCases>();
+builder.Services.AddScoped<ServidorUseCases>();
+builder.Services.AddScoped<LocationUseCases>();
+builder.Services.AddScoped<DeviceUseCases>();
+builder.Services.AddScoped<AuthService>();
+
+// Configuración de otras dependencias
 builder.Services.AddSingleton(sp =>
 {
     var iotHubConnectionString = builder.Configuration.GetConnectionString("IoTHub");
@@ -72,8 +86,6 @@ builder.Services.AddDbContext<IoTDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 // Registrar MigrationService
 //builder.Services.AddTransient<MigrationService>();
-
-
 
 // Configuración de JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -91,10 +103,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-// Agregar los casos de uso
-builder.Services.AddScoped<UserUseCases>();
-builder.Services.AddScoped<AuthService>();
 
 // Agregar políticas de CORS
 builder.Services.AddCors(options =>

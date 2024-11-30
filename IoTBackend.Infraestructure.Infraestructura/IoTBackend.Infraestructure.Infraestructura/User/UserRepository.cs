@@ -19,6 +19,7 @@ namespace IoTBackend.Infraestructure.Infraestructura.User
             {
                 Guid guid = Guid.NewGuid();
                 user.Id = guid.ToString();
+                user.FechaCreacion = DateTime.Now;
                 await _context.Users.AddAsync(user);
                 await _context.SaveChangesAsync();
                 return true;
@@ -29,7 +30,7 @@ namespace IoTBackend.Infraestructure.Infraestructura.User
             }
         }
 
-        public async Task<bool> DeleteUserAsync(Guid id)
+        public async Task<bool> DeleteUserAsync(string id)
         {
             try
             {
@@ -59,7 +60,7 @@ namespace IoTBackend.Infraestructure.Infraestructura.User
             return await _context.Users.ToListAsync();
         }
 
-        public async Task<Persistence.Contexts.User> GetUserByIdAsync(Guid id)
+        public async Task<Persistence.Contexts.User> GetUserByIdAsync(string id)
         {
             return await _context.Users.FindAsync(id);
         }

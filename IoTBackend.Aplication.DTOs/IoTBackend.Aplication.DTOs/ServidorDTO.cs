@@ -6,7 +6,9 @@
         public string? NombreHost { get; set; }
         public string? DireccionIP { get; set; }
         public DateTime FechaCreacion { get; set; }
-        public bool Estado { get; set; }
         public string? Auditoria { get; set; }
+        public bool Estado { get; set; }
+        public Guid IdMQTT { get; set; }            
+      
     }
 }

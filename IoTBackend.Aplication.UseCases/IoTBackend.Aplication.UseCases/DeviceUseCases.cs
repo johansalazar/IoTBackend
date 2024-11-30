@@ -14,6 +14,7 @@ namespace IoTBackend.Aplication.UseCases
             try
             {
                 var device = mapper.Map<IoTDevice>(devicedto);
+                device.FechaCreacion = DateTime.Now;
                 var result = await repository.AddDeviceAsync(device);
                 if (result)
                 {
@@ -36,7 +37,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<IoTDevice>> GetDeviceByIdAsync(Guid id)
+        public async Task<Response<IoTDevice>> GetDeviceByIdAsync(string id)
         {
             var response = new Response<IoTDevice>();
             try
@@ -80,7 +81,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<IoTDevice>> UpdateDeviceAsync(Guid id, IoTDeviceDTO devicedto)
+        public async Task<Response<IoTDevice>> UpdateDeviceAsync(string id, IoTDeviceDTO devicedto)
         {
             var response = new Response<IoTDevice>();
             try
@@ -93,10 +94,11 @@ namespace IoTBackend.Aplication.UseCases
                     return response;
                 }
 
+
                 // Actualiza los datos del dispositivo
                 mapper.Map(devicedto, device);
 
-                var result = await repository.UpdateDeviceAsync(device);
+                var result = await repository.UpdateDeviceAsync(id, device);
                 if (result)
                 {
                     response.Data = device;
@@ -118,7 +120,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> DeleteDeviceAsync(Guid id)
+        public async Task<Response<bool>> DeleteDeviceAsync(string id)
         {
             var response = new Response<bool>();
             try
@@ -130,18 +132,21 @@ namespace IoTBackend.Aplication.UseCases
                     response.Message = "Dispositivo no encontrado.";
                     return response;
                 }
-
-                var result = await repository.DeleteDeviceAsync(id);
-                if (result)
+                var resultBD = await repository.DeleteDeviceBdAsync(id);
+                if (resultBD)
                 {
-                    response.Data = true;
-                    response.IsSuccess = true;
-                    response.Message = "Eliminación exitosa.";
-                }
-                else
-                {
-                    response.IsSuccess = false;
-                    response.Message = "No se pudo eliminar el dispositivo.";
+                    var result = await repository.DeleteDeviceAsync(id);
+                    if (resultBD)
+                    {
+                        response.Data = true;
+                        response.IsSuccess = true;
+                        response.Message = "Eliminación exitosa.";
+                    }
+                    else
+                    {
+                        response.IsSuccess = false;
+                        response.Message = "No se pudo eliminar el dispositivo.";
+                    }
                 }
             }
             catch (Exception e)

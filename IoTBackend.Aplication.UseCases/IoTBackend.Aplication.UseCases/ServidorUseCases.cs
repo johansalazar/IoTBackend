@@ -29,7 +29,7 @@ namespace IoTBackend.Aplication.UseCases
             {
                 var servidor = _mapper.Map<Servidor>(servidorDto);
                 servidor.Id = Guid.NewGuid(); // Asignar un nuevo GUID al servidor
-
+                servidor.FechaCreacion = DateTime.Now;
                 // Asegurarse de que el campo de auditoría está presente
                 servidor.Auditoria = $"Creado por: Admin, Fecha: {DateTime.UtcNow}";
 
@@ -55,7 +55,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<ServidorDTO>> GetServidorByIdAsync(Guid id)
+        public async Task<Response<ServidorDTO>> GetServidorByIdAsync(string id)
         {
             var response = new Response<ServidorDTO>();
             try
@@ -99,7 +99,7 @@ namespace IoTBackend.Aplication.UseCases
             return response;
         }
 
-        public async Task<Response<bool>> DeleteServidorAsync(Guid id)
+        public async Task<Response<bool>> DeleteServidorAsync(string id)
         {
             var response = new Response<bool>();
             try
@@ -117,16 +117,35 @@ namespace IoTBackend.Aplication.UseCases
 
             return response;
         }
-        public async Task<Response<bool>> UpdateServidorAsync(ServidorDTO servidorDto)
+        public async Task<Response<bool>> UpdateServidorAsync(string id, ServidorDTO servidorDto)
         {
             var response = new Response<bool>();
             try
             {
-                var servidor = _mapper.Map<Servidor>(servidorDto);
-                var result = await _servidorRepository.UpdateServidorAsync(servidor);
-                response.Data = result;
-                response.IsSuccess = result;
-                response.Message = result ? "Servidor actualizado con éxito." : "No se pudo actualizar el MQTT.";
+                var servidor = await _servidorRepository.GetServidorByIdAsync(id);
+                if (servidor == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Usuario no encontrado.";
+                    return response;
+                }
+                // Mapeo del DTO al modelo de dominio
+                _mapper.Map(servidorDto, servidor);
+
+                var result = await 
+                    _servidorRepository.UpdateServidorAsync(servidor);
+                
+                if (result)
+                {
+                    response.Data = result;
+                    response.IsSuccess = result;
+                    response.Message = result ? "Servidor actualizado con éxito." : "No se pudo actualizar el Servidor.";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "No se pudo actualizar el Servidor.";
+                }
             }
             catch (Exception e)
             {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IoTBackend.Aplication.DTOs;
 using IoTBackend.Aplication.Interfaces;
+using IoTBackend.Domain.Dominio.Entities;
 using IoTBackend.Infraestructure.Persistence.Contexts;
 using IoTBackend.Transversal.Common;
 using System;
@@ -22,8 +23,10 @@ namespace IoTBackend.Aplication.UseCases
             var response = new Response<UserDTO>();
             try
             {
+                
                 // Mapeo del DTO a modelo de dominio
                 var user = _mapper.Map<User>(userDto);
+                userDto.FechaCreacion = DateTime.Now;
 
                 // Agregar el usuario en la base de datos
                 var result = await _userRepository.AddUserAsync(user);
@@ -49,7 +52,7 @@ namespace IoTBackend.Aplication.UseCases
         }
 
         // Obtener un usuario por ID
-        public async Task<UserDTO> GetUserByIdAsync(Guid id)
+        public async Task<UserDTO> GetUserByIdAsync(string id)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             return user != null ? _mapper.Map<UserDTO>(user) : null;
@@ -63,7 +66,7 @@ namespace IoTBackend.Aplication.UseCases
         }
 
         // Actualizar un usuario
-        public async Task<Response<UserDTO>> UpdateUserAsync(Guid id, UserDTO userDto)
+        public async Task<Response<UserDTO>> UpdateUserAsync(string id, UserDTO userDto)
         {
             var response = new Response<UserDTO>();
             try
@@ -102,7 +105,7 @@ namespace IoTBackend.Aplication.UseCases
         }
 
         // Eliminar un usuario
-        public async Task<Response<UserDTO>> DeleteUserAsync(Guid id)
+        public async Task<Response<UserDTO>> DeleteUserAsync(string id)
         {
             var response = new Response<UserDTO>();
             try

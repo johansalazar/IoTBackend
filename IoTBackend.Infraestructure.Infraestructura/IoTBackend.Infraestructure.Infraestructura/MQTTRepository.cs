@@ -2,11 +2,6 @@
 using IoTBackend.Domain.Dominio.Entities;
 using IoTBackend.Infraestructure.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IoTBackend.Infraestructure.Infraestructura
 {
@@ -19,9 +14,18 @@ namespace IoTBackend.Infraestructure.Infraestructura
             _context = context;
         }
 
-        public async Task<MQTT> GetMQTTByIdAsync(Guid id)
+        public async Task<MQTT> GetMQTTByIdAsync(string id)
         {
-            return await _context.MQTTs.FirstOrDefaultAsync(m => m.Id == id);
+
+            if (Guid.TryParse(id, out Guid parsedId))
+            {
+                return await _context.MQTTs.FirstOrDefaultAsync(m => m.Id == parsedId);
+            }
+            else
+            {
+                // Manejar el caso cuando la conversión falle
+                throw new ArgumentException("El ID proporcionado no es un GUID válido.", nameof(id));
+            }
         }
 
         public async Task<IEnumerable<MQTT>> GetAllMQTTsAsync()
@@ -38,19 +42,45 @@ namespace IoTBackend.Infraestructure.Infraestructura
 
         public async Task<bool> UpdateMQTTAsync(MQTT mqtt)
         {
-            _context.MQTTs.Update(mqtt);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+            try
+            {
+                var existingMqtt = await _context.MQTTs.FindAsync(mqtt.Id);
+                if (existingMqtt == null)
+                    return false;
+
+                _context.Entry(existingMqtt).CurrentValues.SetValues(mqtt);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public async Task<bool> DeleteMQTTAsync(Guid id)
+        public async Task<bool> DeleteMQTTAsync(string id)
         {
-            var mqtt = await GetMQTTByIdAsync(id);
-            if (mqtt == null) return false;
+            try
+            {
+                var mqtt = await GetMQTTByIdAsync(id);
+                if (mqtt == null) return false;
 
-            _context.MQTTs.Remove(mqtt);
-            var result = await _context.SaveChangesAsync();
-            return result > 0;
+                // Cambiar el estado a inactivo (false)
+                mqtt.Estado = false;
+
+                // Marcar la entidad como modificada
+                _context.MQTTs.Update(mqtt);
+
+                
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                // Aquí puedes registrar el error si es necesario
+                Console.WriteLine($"Error al desactivar el mqtt: {ex.Message}");
+                return false;
+            }
         }
     }
 }
